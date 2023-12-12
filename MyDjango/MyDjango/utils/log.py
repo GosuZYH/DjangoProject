@@ -22,6 +22,7 @@ except ImportError:
 
 class Logger(object):
     __instance = None
+    log = None
 
     level_relations = {
         'debug': logging.DEBUG,
@@ -31,38 +32,32 @@ class Logger(object):
         'crit': logging.CRITICAL
     }
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, level='info', when='D', backcount=3, *args, **kwargs):
         if not cls.__instance:
             cls.__instance = object.__new__(cls)
+            filename = os.path.join(LOG_PATH, 'web')
+            cls.log = logging.getLogger(filename)
+            cls.log.setLevel(cls.level_relations.get(level))  # 日志级别
+
+            fmt = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+            format_str = logging.Formatter(fmt)  # 日志格式
+
+            screen_out = logging.StreamHandler()  # 屏幕输出
+            screen_out.setFormatter(format_str)  # 屏显格式
+
+            file_out = MultiprocessHandler(filename=filename, when=when, backupCount=backcount,
+                                           encoding='utf-8')  # 往文件里写入#指定间隔时间自动生成文件的处理器
+            file_out.setFormatter(format_str)  # 设置文件里写入的格式
+
+            cls.log.addHandler(screen_out)  # 把对象加到logger里
+            cls.log.addHandler(file_out)
+
+            # self.logger.removeHandler(screen_out)
+            # self.logger.removeHandler(file_out)
+
+            screen_out.close()
+            file_out.close()
         return cls.__instance
-
-    def __init__(self, level='info', when='D', backcount=3):
-        filename = os.path.join(LOG_PATH, 'web')
-        self.logger = logging.getLogger(filename)
-        self.logger.setLevel(self.level_relations.get(level))  # 日志级别
-
-        fmt = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
-        format_str = logging.Formatter(fmt)  # 日志格式
-
-        screen_out = logging.StreamHandler()  # 屏幕输出
-        screen_out.setFormatter(format_str)  # 屏显格式
-
-        file_out = MultiprocessHandler(filename=filename, when=when, backupCount=backcount,
-                                       encoding='utf-8')  # 往文件里写入#指定间隔时间自动生成文件的处理器
-        file_out.setFormatter(format_str)  # 设置文件里写入的格式
-
-        self.logger.addHandler(screen_out)  # 把对象加到logger里
-        self.logger.addHandler(file_out)
-
-        # self.logger.removeHandler(screen_out)
-        # self.logger.removeHandler(file_out)
-
-        screen_out.close()
-        file_out.close()
-
-    @property
-    def log(self):
-        return self.logger
 
 
 class MultiprocessHandler(logging.FileHandler):
