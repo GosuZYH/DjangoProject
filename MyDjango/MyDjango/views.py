@@ -8,14 +8,5 @@
 # @File    : views.py.py
 import os
 
-from django.shortcuts import render
-
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MyDjango.settings")
-
-
-def runoob(request):
-    context = {'hello': 'Hello World!'}
-    return render(request, 'demo.html', context)
-
-

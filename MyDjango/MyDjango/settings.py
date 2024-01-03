@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -72,18 +74,18 @@ WSGI_APPLICATION = 'MyDjango.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
-        'NAME': 'gosu_db',  # 数据库名称
-        'HOST': 'gosu16954.rwlb.rds.aliyuncs.com',  # 数据库地址，本机 ip 地址 127.0.0.1
-        # 'PORT': 3306,  # 端口
-        'USER': 'gosu',  # 数据库用户名
-        'PASSWORD': 'zyhZYH123123!',  # 数据库密码
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
+    #     'NAME': 'gosu_db',  # 数据库名称
+    #     'HOST': 'gosu16954.rwlb.rds.aliyuncs.com',  # 数据库地址，本机 ip 地址 127.0.0.1
+    #     # 'PORT': 3306,  # 端口
+    #     'USER': 'gosu',  # 数据库用户名
+    #     'PASSWORD': 'zyhZYH123123!',  # 数据库密码
+    # }
 }
 
 # Password validation

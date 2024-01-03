@@ -1,11 +1,16 @@
 import os
 
-from .models import User
 from django.http import HttpResponse
+from django.shortcuts import render
 
-from MyDjango.utils.log import Logger
+from TestModel.models import User
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MyDjango.settings")
+
+
+def runoob(request):
+    context = {'hello': 'Hello World!'}
+    return render(request, 'demo.html', context)
 
 
 def addUser(request):
